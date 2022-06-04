@@ -1,7 +1,8 @@
 const startButton = document.getElementById("start");
 const pauseButton = document.getElementById("pause");
-const resetButton = document.getElementById("reset");
+const stopButton = document.getElementById("stop");
 const continueButton = document.getElementById("continue");
+const resetButton = document.getElementById("reset");
 
 class Pomodoro {
   constructor(interval) {
@@ -55,16 +56,47 @@ class Pomodoro {
     this.countOneSecond(this.remaining);
   }
 
-  reset() {
+  stopReset() {
     clearTimeout(this.timeout);
     this.remaining = this.interval;
     this.display.textContent = this.getTimeString(this.interval);
   }
 }
 
-const pomodoro = new Pomodoro(3);
+const pomodoro = new Pomodoro(300);
 
-startButton.addEventListener("click", () => pomodoro.start());
-pauseButton.addEventListener("click", () => pomodoro.pause());
-resetButton.addEventListener("click", () => pomodoro.reset());
-continueButton.addEventListener("click", () => pomodoro.continue());
+function displayRemoveButtons(displayButtons, removeButtons) {
+  displayButtons.forEach((button) => button.classList.remove("hidden"));
+  removeButtons.forEach((button) => button.classList.add("hidden"));
+}
+
+startButton.addEventListener("click", () => {
+  pomodoro.start();
+  displayRemoveButtons([pauseButton, stopButton], [startButton]);
+});
+
+pauseButton.addEventListener("click", () => {
+  pomodoro.pause();
+  displayRemoveButtons(
+    [continueButton, resetButton],
+    [pauseButton, stopButton]
+  );
+});
+
+continueButton.addEventListener("click", () => {
+  pomodoro.continue();
+  displayRemoveButtons(
+    [pauseButton, stopButton],
+    [continueButton, resetButton]
+  );
+});
+
+stopButton.addEventListener("click", () => {
+  pomodoro.stopReset();
+  displayRemoveButtons([startButton], [stopButton, pauseButton]);
+});
+
+resetButton.addEventListener("click", () => {
+  pomodoro.stopReset();
+  displayRemoveButtons([startButton], [resetButton, continueButton]);
+});
