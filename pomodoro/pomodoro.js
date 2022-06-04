@@ -1,18 +1,25 @@
 class Pomodoro {
-  constructor(focusSession, shortBreak, longBreak, cycles) {
+  constructor(focusSession, shortBreak, longBreak) {
     this.focusSession = focusSession;
     this.shortBreak = shortBreak;
     this.longBreak = longBreak;
-    this.cycles = cycles;
 
-    this.currentBreakType = this.shortBreak;
-    this.remaining = this.focusSession;
+    this.pomodorosCounter = 0;
+    this.nextMode = "focus";
+
     this.timeout;
+
     this.display = document.getElementById("time");
     this.ding = document.getElementById("ding");
     this.title = document.getElementById("title");
-    this.currentMode = "focus";
-    this.pomodorosCouter = 0;
+    this.counter = document.getElementById("counter");
+    this.display.textContent = this.getTimeString(focusSession);
+
+    this.currentTimer;
+
+    this.remaining = this.focusSession;
+
+    this.breakDuration = this.shortBreak;
   }
 
   getTimeString(time) {
@@ -33,45 +40,57 @@ class Pomodoro {
 
       this.display.textContent = this.getTimeString(time);
 
-      if (time > 0) {
+      if (time >= 0) {
         this.countOneSecond(time);
       } else {
         this.ding.play();
-        if (this.cycles) {
-          this.currentMode === "rest"
-            ? this.startBreak()
-            : this.startFocusSession();
-        } else {
-          this.title.textContent = "Well Done!";
-          document.body.style.background = "green";
-        }
+
+        this.start();
       }
     }, 1000);
   }
 
   startFocusSession() {
-    console.log("Cycles remaining: ", this.cycles - 1);
-    this.title.textContent = "Focus";
     document.body.style.background = "tomato";
+    this.title.textContent = "Focus";
+
+    this.currentTimer = this.focusSession;
+    this.pomodorosCounter++;
+    this.currentMode = this.nextMode;
+    this.nextMode = this.pomodorosCounter % 4 ? "shortBreak " : "longBreak";
+
     clearTimeout(this.timeout);
-    this.remaining = this.focusSession;
     this.display.textContent = this.getTimeString(this.focusSession);
     this.countOneSecond(this.focusSession);
-    this.cycles--;
-    this.currentMode = "rest";
-    this.pomodorosCouter++;
-    this.currentBreakType =
-      this.pomodorosCouter % 4 ? this.shortBreak : this.longBreak;
+
+    this.breakDuration =
+      this.pomodorosCounter % 4 ? this.shortBreak : this.longBreak;
+
+    this.remaining = this.focusSession;
   }
 
   startBreak() {
-    this.title.textContent = "Rest";
     document.body.style.background = "green";
+    this.title.textContent = "Rest";
+    this.counter.textContent = this.pomodorosCounter;
+
+    this.currentTimer =
+      this.pomodorosCounter % 4 ? this.shortBreak : this.longBreak;
+
+    this.currentMode = this.nextMode;
+    this.nextMode = "focus";
+
+    this.display.textContent = this.getTimeString(this.breakDuration);
     clearTimeout(this.timeout);
-    this.remaining = this.currentBreakType;
-    this.display.textContent = this.getTimeString(this.currentBreakType);
-    this.countOneSecond(this.currentBreakType);
-    this.currentMode = "focus";
+    this.countOneSecond(this.breakDuration);
+
+    this.remaining = this.breakDuration;
+  }
+
+  start() {
+    this.nextMode === "focus" ? this.startFocusSession() : this.startBreak();
+
+    console.log(this.nextMode);
   }
 
   pause() {
@@ -80,13 +99,32 @@ class Pomodoro {
 
   continue() {
     clearTimeout(this.timeout);
-    console.log(this.remaining);
     this.countOneSecond(this.remaining);
   }
 
-  stopReset() {
+  stop() {
+    this.title.textContent = "Pomodoro";
+    document.body.style.background = "tomato";
+
     clearTimeout(this.timeout);
+    this.nextMode = "focus";
+    this.pomodorosCounter = 0;
+    this.counter.textContent = this.pomodorosCounter;
     this.remaining = this.focusSession;
     this.display.textContent = this.getTimeString(this.focusSession);
+  }
+
+  reset() {
+    this.nextMode = this.currentMode;
+
+    if (this.currentMode === "focus") {
+      this.pomodorosCounter--;
+    }
+
+    clearTimeout(this.timeout);
+    this.remaining = this.currentTimer;
+    this.display.textContent = this.getTimeString(this.currentTimer);
+
+    console.log(this.currentMode, this.pomodorosCounter);
   }
 }

@@ -5,7 +5,7 @@ const continueButton = document.getElementById("continue");
 const resetButton = document.getElementById("reset");
 const buttons = document.querySelectorAll(".button");
 
-const pomodoro = new Pomodoro(1, 300, 4, 14);
+const pomodoro = new Pomodoro(10, 3, 5);
 
 function displayRemoveButtons(displayButtons, removeButtons) {
   displayButtons.forEach((button) => button.classList.remove("hidden"));
@@ -13,16 +13,13 @@ function displayRemoveButtons(displayButtons, removeButtons) {
 }
 
 startButton.addEventListener("click", () => {
-  pomodoro.startFocusSession();
+  pomodoro.start();
   displayRemoveButtons([pauseButton, stopButton], [startButton]);
 });
 
 pauseButton.addEventListener("click", () => {
   pomodoro.pause();
-  displayRemoveButtons(
-    [continueButton, resetButton],
-    [pauseButton, stopButton]
-  );
+  displayRemoveButtons([continueButton, resetButton], [pauseButton]);
 });
 
 continueButton.addEventListener("click", () => {
@@ -34,11 +31,17 @@ continueButton.addEventListener("click", () => {
 });
 
 stopButton.addEventListener("click", () => {
-  pomodoro.stopReset();
-  displayRemoveButtons([startButton], [stopButton, pauseButton]);
+  pomodoro.stop();
+  displayRemoveButtons(
+    [startButton],
+    [stopButton, pauseButton, continueButton, resetButton]
+  );
 });
 
 resetButton.addEventListener("click", () => {
-  pomodoro.stopReset();
-  displayRemoveButtons([startButton], [resetButton, continueButton]);
+  pomodoro.reset();
+  displayRemoveButtons(
+    [startButton],
+    [resetButton, continueButton, stopButton]
+  );
 });
