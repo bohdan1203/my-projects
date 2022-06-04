@@ -1,14 +1,15 @@
-// https://github.com/florinpop17/app-ideas/blob/master/Projects/1-Beginner/Pomodoro-Clock.md
-
 const startButton = document.getElementById("start");
 const pauseButton = document.getElementById("pause");
+const resetButton = document.getElementById("reset");
+const continueButton = document.getElementById("continue");
 
 class Pomodoro {
   constructor(interval) {
     this.interval = interval;
     this.remaining = this.interval;
     this.timeout;
-    this.display = document.getElementById("ele");
+    this.display = document.getElementById("time");
+    this.ding = document.getElementById("ding");
   }
 
   getTimeString(time) {
@@ -32,24 +33,38 @@ class Pomodoro {
       if (time > 0) {
         this.countOneSecond(time);
       } else {
-        console.log("time is out");
+        this.ding.play();
       }
     }, 1000);
   }
 
   start() {
     clearTimeout(this.timeout);
+    this.remaining = this.interval;
     this.display.textContent = this.getTimeString(this.interval);
     this.countOneSecond(this.interval);
   }
 
   pause() {
     clearTimeout(this.timeout);
+  }
+
+  continue() {
+    clearTimeout(this.timeout);
     console.log(this.remaining);
+    this.countOneSecond(this.remaining);
+  }
+
+  reset() {
+    clearTimeout(this.timeout);
+    this.remaining = this.interval;
+    this.display.textContent = this.getTimeString(this.interval);
   }
 }
 
-const pomodoro = new Pomodoro(1500);
+const pomodoro = new Pomodoro(3);
 
 startButton.addEventListener("click", () => pomodoro.start());
 pauseButton.addEventListener("click", () => pomodoro.pause());
+resetButton.addEventListener("click", () => pomodoro.reset());
+continueButton.addEventListener("click", () => pomodoro.continue());
