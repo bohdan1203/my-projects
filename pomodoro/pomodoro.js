@@ -1,16 +1,18 @@
-const startButton = document.getElementById("start");
-const pauseButton = document.getElementById("pause");
-const stopButton = document.getElementById("stop");
-const continueButton = document.getElementById("continue");
-const resetButton = document.getElementById("reset");
-
 class Pomodoro {
-  constructor(interval) {
-    this.interval = interval;
-    this.remaining = this.interval;
+  constructor(focusSession, shortBreak, longBreak, cycles) {
+    this.focusSession = focusSession;
+    this.shortBreak = shortBreak;
+    this.longBreak = longBreak;
+    this.cycles = cycles;
+
+    this.currentBreakType = this.shortBreak;
+    this.remaining = this.focusSession;
     this.timeout;
     this.display = document.getElementById("time");
     this.ding = document.getElementById("ding");
+    this.title = document.getElementById("title");
+    this.currentMode = "focus";
+    this.pomodorosCouter = 0;
   }
 
   getTimeString(time) {
@@ -35,15 +37,41 @@ class Pomodoro {
         this.countOneSecond(time);
       } else {
         this.ding.play();
+        if (this.cycles) {
+          this.currentMode === "rest"
+            ? this.startBreak()
+            : this.startFocusSession();
+        } else {
+          this.title.textContent = "Well Done!";
+          document.body.style.background = "green";
+        }
       }
     }, 1000);
   }
 
-  start() {
+  startFocusSession() {
+    console.log("Cycles remaining: ", this.cycles - 1);
+    this.title.textContent = "Focus";
+    document.body.style.background = "tomato";
     clearTimeout(this.timeout);
-    this.remaining = this.interval;
-    this.display.textContent = this.getTimeString(this.interval);
-    this.countOneSecond(this.interval);
+    this.remaining = this.focusSession;
+    this.display.textContent = this.getTimeString(this.focusSession);
+    this.countOneSecond(this.focusSession);
+    this.cycles--;
+    this.currentMode = "rest";
+    this.pomodorosCouter++;
+    this.currentBreakType =
+      this.pomodorosCouter % 4 ? this.shortBreak : this.longBreak;
+  }
+
+  startBreak() {
+    this.title.textContent = "Rest";
+    document.body.style.background = "green";
+    clearTimeout(this.timeout);
+    this.remaining = this.currentBreakType;
+    this.display.textContent = this.getTimeString(this.currentBreakType);
+    this.countOneSecond(this.currentBreakType);
+    this.currentMode = "focus";
   }
 
   pause() {
@@ -58,45 +86,7 @@ class Pomodoro {
 
   stopReset() {
     clearTimeout(this.timeout);
-    this.remaining = this.interval;
-    this.display.textContent = this.getTimeString(this.interval);
+    this.remaining = this.focusSession;
+    this.display.textContent = this.getTimeString(this.focusSession);
   }
 }
-
-const pomodoro = new Pomodoro(300);
-
-function displayRemoveButtons(displayButtons, removeButtons) {
-  displayButtons.forEach((button) => button.classList.remove("hidden"));
-  removeButtons.forEach((button) => button.classList.add("hidden"));
-}
-
-startButton.addEventListener("click", () => {
-  pomodoro.start();
-  displayRemoveButtons([pauseButton, stopButton], [startButton]);
-});
-
-pauseButton.addEventListener("click", () => {
-  pomodoro.pause();
-  displayRemoveButtons(
-    [continueButton, resetButton],
-    [pauseButton, stopButton]
-  );
-});
-
-continueButton.addEventListener("click", () => {
-  pomodoro.continue();
-  displayRemoveButtons(
-    [pauseButton, stopButton],
-    [continueButton, resetButton]
-  );
-});
-
-stopButton.addEventListener("click", () => {
-  pomodoro.stopReset();
-  displayRemoveButtons([startButton], [stopButton, pauseButton]);
-});
-
-resetButton.addEventListener("click", () => {
-  pomodoro.stopReset();
-  displayRemoveButtons([startButton], [resetButton, continueButton]);
-});
