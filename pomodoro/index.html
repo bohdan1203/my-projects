@@ -27,5 +27,25 @@
     </select> -->
 
     <audio src="ding.wav" id="ding"></audio>
+
+    <button class="button" id="settings">🔆</button>
+
+    <aside id="overlay"></aside>
+    <form action="#" id="settings-form">
+      <h3>Settings</h3>
+      <h4>Timer Settings</h4>
+      <label>Focus Duration <input type="number" id="focus" step="5" /></label>
+      <label
+        >Short Break Duration <input type="number" id="short-break" step="5"
+      /></label>
+      <label
+        >Long Break Duration (Every 4th Break)<input
+          type="number"
+          id="long-break"
+          step="5"
+      /></label>
+
+      <button class="button" id="save" type="submit">Save</button>
+    </form>
   </body>
 </html>

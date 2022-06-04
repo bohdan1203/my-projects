@@ -1,8 +1,8 @@
 class Pomodoro {
   constructor(focusSession, shortBreak, longBreak) {
-    this.focusSession = focusSession;
-    this.shortBreak = shortBreak;
-    this.longBreak = longBreak;
+    this.focusSession = focusSession * 60;
+    this.shortBreak = shortBreak * 60;
+    this.longBreak = longBreak * 60;
 
     this.pomodorosCounter = 0;
     this.nextMode = "focus";
@@ -13,7 +13,7 @@ class Pomodoro {
     this.ding = document.getElementById("ding");
     this.title = document.getElementById("title");
     this.counter = document.getElementById("counter");
-    this.display.textContent = this.getTimeString(focusSession);
+    this.display.textContent = this.getTimeString(this.focusSession);
 
     this.currentTimer;
 
@@ -33,18 +33,13 @@ class Pomodoro {
   }
 
   countOneSecond(time) {
-    this.timeout = setTimeout(() => {
-      --time;
-
-      this.remaining = time;
-
+    this.timeout = setInterval(() => {
+      this.remaining = --time;
       this.display.textContent = this.getTimeString(time);
+      document.title = this.getTimeString(time);
 
-      if (time >= 0) {
-        this.countOneSecond(time);
-      } else {
+      if (time < 0) {
         this.ding.play();
-
         this.start();
       }
     }, 1000);
@@ -103,7 +98,7 @@ class Pomodoro {
   }
 
   stop() {
-    this.title.textContent = "Pomodoro";
+    this.title.textContent = "Welcome!";
     document.body.style.background = "tomato";
 
     clearTimeout(this.timeout);
