@@ -1,9 +1,8 @@
 class Pomodoro {
-  constructor(focusSession, shortBreak, longBreak, textContent) {
+  constructor(focusSession, shortBreak, longBreak) {
     this.focusSession = focusSession * 60;
     this.shortBreak = shortBreak * 60;
     this.longBreak = longBreak * 60;
-    this.textContent = textContent;
 
     this.ding = document.getElementById("ding");
 
