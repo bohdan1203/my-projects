@@ -37,13 +37,14 @@ class Pomodoro {
     }, 1000);
   }
   startFocusSession() {
+    clearTimeout(this.timeout);
     document.body.style.background = "tomato";
 
     this.currentTimer = this.focusSession;
     this.pomodorosCounter++;
     this.currentMode = this.nextMode;
     this.nextMode = this.pomodorosCounter % 4 ? "shortBreak " : "longBreak";
-    clearTimeout(this.timeout);
+
     this.display.textContent = this.getTimeString(this.focusSession);
     this.countOneSecond(this.focusSession);
     this.breakDuration =
@@ -51,6 +52,7 @@ class Pomodoro {
     this.remaining = this.focusSession;
   }
   startBreak() {
+    clearTimeout(this.timeout);
     document.body.style.background = "green";
 
     this.counter.textContent = this.pomodorosCounter;
@@ -59,7 +61,7 @@ class Pomodoro {
     this.currentMode = this.nextMode;
     this.nextMode = "focus";
     this.display.textContent = this.getTimeString(this.breakDuration);
-    clearTimeout(this.timeout);
+
     this.countOneSecond(this.breakDuration);
     this.remaining = this.breakDuration;
   }
@@ -77,6 +79,7 @@ class Pomodoro {
   stop() {
     document.body.style.background = "tomato";
     clearTimeout(this.timeout);
+
     this.nextMode = "focus";
     this.pomodorosCounter = 0;
     this.counter.textContent = this.pomodorosCounter;

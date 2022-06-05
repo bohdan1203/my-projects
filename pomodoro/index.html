@@ -11,27 +11,23 @@
     <script defer src="script.js"></script>
   </head>
   <body>
-    <h1 id="title"></h1>
-    <h2><span id="pomodoros"></span>: <span id="counter"></span></h2>
-    <div id="time"></div>
+    <div class="container">
+      <h1 id="title"></h1>
+      <h2><span id="pomodoros"></span>: <span id="counter"></span></h2>
+      <div id="time"></div>
 
-    <button class="button" id="start"></button>
-    <button class="button hidden" id="pause"></button>
-    <button class="button hidden" id="continue"></button>
-    <button class="button hidden" id="reset"></button>
-    <button class="button hidden" id="stop"></button>
-
-    <!-- <select class="" name="" id="theme">
-      <option value="default" selected>Default</option>
-      <option value="light">Light</option>
-      <option value="dark">Dark</option>
-    </select> -->
+      <div class="container container-buttons">
+        <button class="button" id="start"></button>
+        <button class="button hidden" id="pause"></button>
+        <button class="button hidden" id="continue"></button>
+        <button class="button hidden" id="reset"></button>
+        <button class="button hidden" id="stop"></button>
+      </div>
+    </div>
 
     <audio src="ding.wav" id="ding"></audio>
 
     <img src="settings.svg" alt="settings" id="settings" />
-
-    <!-- <button class="button" id="settings">🔆</button> -->
 
     <aside id="overlay"></aside>
     <form action="#" id="settings-form">
