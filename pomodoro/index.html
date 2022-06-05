@@ -6,19 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pomodoro</title>
     <link rel="stylesheet" href="styles.css" />
+    <script defer src="languages.js"></script>
     <script defer src="pomodoro.js"></script>
     <script defer src="script.js"></script>
   </head>
   <body>
-    <h1 id="title">Welcome!</h1>
-    <h2>Pomodoro Done: <span id="counter">0</span></h2>
-    <div id="time">25:00</div>
+    <h1 id="title"></h1>
+    <h2><span id="pomodoros"></span>: <span id="counter"></span></h2>
+    <div id="time"></div>
 
-    <button class="button" id="start">Start</button>
-    <button class="button hidden" id="pause">Pause</button>
-    <button class="button hidden" id="continue">Countinue</button>
-    <button class="button hidden" id="reset">Reset</button>
-    <button class="button hidden" id="stop">Stop</button>
+    <button class="button" id="start"></button>
+    <button class="button hidden" id="pause"></button>
+    <button class="button hidden" id="continue"></button>
+    <button class="button hidden" id="reset"></button>
+    <button class="button hidden" id="stop"></button>
 
     <!-- <select class="" name="" id="theme">
       <option value="default" selected>Default</option>
@@ -28,24 +29,31 @@
 
     <audio src="ding.wav" id="ding"></audio>
 
-    <button class="button" id="settings">🔆</button>
+    <img src="settings.svg" alt="settings" id="settings" />
+
+    <!-- <button class="button" id="settings">🔆</button> -->
 
     <aside id="overlay"></aside>
     <form action="#" id="settings-form">
-      <h3>Settings</h3>
-      <h4>Timer Settings</h4>
-      <label>Focus Duration <input type="number" id="focus" step="5" /></label>
-      <label
-        >Short Break Duration <input type="number" id="short-break" step="5"
-      /></label>
-      <label
-        >Long Break Duration (Every 4th Break)<input
-          type="number"
-          id="long-break"
-          step="5"
-      /></label>
+      <h3 id="settings-title"></h3>
+      <h4 id="timer-settings"></h4>
+      <label id="focus-duration" for="focus"> </label>
+      <input type="number" id="focus" min="1" value="25" />
+      <label id="short-break-duration"> </label>
+      <input type="number" id="short-break" min="1" value="5" />
+      <label id="long-break-duration"></label>
+      <input type="number" id="long-break" min="1" value="15" />
 
-      <button class="button" id="save" type="submit">Save</button>
+      <label id="language" for="language"></label>
+      <select class="" name="" id="language-select">
+        <option value="english" selected>English</option>
+        <option value="ukrainian">Українська</option>
+      </select>
+
+      <div>
+        <button class="button" id="save" type="submit">Save</button>
+        <button class="button" id="cancel" type="button">Cancel</button>
+      </div>
     </form>
   </body>
 </html>
